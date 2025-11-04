@@ -30,28 +30,18 @@ La aplicación consulta y muestra:
 
 #### En Windows:
 1. **Clonar o descargar** el proyecto
-2. **Ejecutar setup automático**:
+2. **Ejecutar setup**:
    ```cmd
    setup.bat
    ```
-   
-   **Si hay problemas con las dependencias**:
-   ```cmd
-   setup-emergency.bat    # Usa versiones específicas
-   diagnostico.bat        # Para identificar problemas
-   ```
-   
    O con PowerShell:
    ```powershell
-   .\setup.ps1    # Solo la primera vez
-   .\run.ps1      # Para ejecutar
+   .\setup.ps1
    ```
 3. **Ejecutar la aplicación**:
    ```cmd
    run.bat
    ```
-
-**📋 Para problemas en Windows**: Ver [WINDOWS.md](WINDOWS.md) con soluciones detalladas
 
 #### En Linux/macOS:
 1. **Clonar o descargar** el proyecto
@@ -116,27 +106,21 @@ Si tienes acceso al ejecutable precompilado, simplemente:
 ConsultaHacienda/
 ├── main.py              # Aplicación principal
 ├── requirements.txt     # Dependencias
-├── build.py            # Script de compilación multiplataforma
-├── README.md           # Este archivo
-├── .gitignore          # Archivos a ignorar en git
+├── build.py            # Script de compilación
+├── README.md           # Documentación
+├── .github/workflows/  # GitHub Actions para CI/CD
 │
 ├── Scripts Linux/macOS:
 ├── run.sh              # Ejecutar aplicación
 ├── compile.sh          # Compilar aplicación
 │
-├── Scripts Windows:
-├── setup.bat           # Configuración inicial
-├── run.bat             # Ejecutar aplicación
-├── compile.bat         # Compilar aplicación
-├── setup.ps1           # Configuración PowerShell
-├── run.ps1             # Ejecutar con PowerShell
-├── compile.ps1         # Compilar con PowerShell
-│
-├── .github/workflows/  # GitHub Actions para CI/CD
-├── venv/               # Entorno virtual (se genera)
-├── build/              # Archivos temporales (se genera)
-├── dist/               # Ejecutables generados (se genera)
-└── release/            # Ejecutables finales (se genera)
+└── Scripts Windows:
+    ├── setup.bat       # Configuración inicial
+    ├── run.bat         # Ejecutar aplicación
+    ├── compile.bat     # Compilar aplicación
+    ├── setup.ps1       # Configuración PowerShell
+    ├── run.ps1         # Ejecutar con PowerShell
+    └── compile.ps1     # Compilar con PowerShell
 ```
 
 ## Dependencias
@@ -167,28 +151,8 @@ python build.py clean
 - Timeout de 10 segundos para las consultas HTTP
 - Compatible con Windows, macOS y Linux
 
-## Compilación multiplataforma
+## Notas importantes
 
-### 🪟 Para Windows:
-- Los scripts `.bat` funcionan en cualquier versión de Windows
-- Los scripts `.ps1` requieren PowerShell (recomendado para Windows 10/11)
-- El ejecutable compilado será `ConsultaHacienda.exe`
-
-### 🐧 Para Linux:
-- Compatible con la mayoría de distribuciones
-- Requiere bibliotecas Qt instaladas para la interfaz gráfica
-- El ejecutable será `ConsultaHacienda`
-
-### 🍎 Para macOS:
-- Compatible con macOS 10.14 o superior
-- El ejecutable funcionará en sistemas Intel y Apple Silicon
-
-### ⚡ GitHub Actions:
-El proyecto incluye workflows automáticos que compilan para Windows, Linux y macOS simultáneamente cuando se hace push con tags.
-
-## Limitaciones
-
-- Requiere conexión a internet para funcionar
-- Depende de la disponibilidad de la API de Hacienda
-- Solo consulta información pública disponible en la API
-- La compilación cruzada requiere el sistema operativo de destino
+- **Requiere Python 3.8-3.12** (Python 3.13+ aún no es compatible con PySide6)
+- **Conexión a internet** necesaria para consultar la API
+- **API oficial** del Ministerio de Hacienda de Costa Rica

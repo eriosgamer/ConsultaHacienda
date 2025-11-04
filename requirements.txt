@@ -1,3 +1,11 @@
-PySide6>=6.5.0
-requests>=2.31.0
-pyinstaller>=5.13.0
+# ConsultaHacienda - Dependencias
+# Compatible con Python 3.8-3.12 (NO 3.13+ aún)
+
+# GUI Framework - versiones probadas y estables
+PySide6>=6.5.0,<6.9.0
+
+# HTTP requests - versión estable
+requests>=2.31.0,<3.0.0
+
+# Compilador a ejecutable - versión compatible
+pyinstaller>=5.13.0,<7.0.0
