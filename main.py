@@ -20,7 +20,15 @@ class ApiWorker(QThread):
     def run(self):
         try:
             url = f"https://api.hacienda.go.cr/fe/ae?identificacion={self.identificacion}"
-            response = requests.get(url, timeout=10)
+            
+            # Headers adicionales para evitar bloqueos de antivirus
+            headers = {
+                'User-Agent': 'ConsultaHacienda/1.0 (https://github.com/eriosgamer/ConsultaHacienda)',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+            
+            response = requests.get(url, timeout=15, headers=headers)
             
             if response.status_code == 200:
                 data = response.json()
@@ -28,6 +36,14 @@ class ApiWorker(QThread):
             else:
                 self.error.emit(f"Error HTTP {response.status_code}: {response.text}")
                 
+        except requests.exceptions.Timeout:
+            self.error.emit("Timeout: La consulta tardó demasiado. Verifica tu conexión a internet.")
+        except requests.exceptions.ConnectionError as e:
+            error_msg = "Error de conexión. Posibles causas:\n"
+            error_msg += "• Sin conexión a internet\n"
+            error_msg += "• API de Hacienda no disponible\n"
+            error_msg += f"\nDetalle técnico: {str(e)}"
+            self.error.emit(error_msg)
         except requests.exceptions.RequestException as e:
             self.error.emit(f"Error de conexión: {str(e)}")
         except json.JSONDecodeError as e:

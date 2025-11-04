@@ -17,13 +17,11 @@ Write-Host "📦 Creando entorno virtual..." -ForegroundColor Yellow
 if (Test-Path "venv") { Remove-Item -Recurse -Force "venv" }
 python -m venv venv
 
-# Activar y instalar dependencias  
+# Activar y instalar dependencias
 Write-Host "📥 Instalando dependencias..." -ForegroundColor Yellow
 & "venv\Scripts\Activate.ps1"
 python -m pip install --upgrade pip
-pip install -r requirements.txt
-
-# Verificar instalación
+pip install -r requirements.txt# Verificar instalación
 Write-Host "🧪 Verificando instalación..." -ForegroundColor Yellow
 try {
     python -c "import PySide6, requests; print('✅ Todo instalado correctamente')"

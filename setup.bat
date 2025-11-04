@@ -19,7 +19,7 @@ echo 📦 Creando entorno virtual...
 if exist venv rmdir /s /q venv
 python -m venv venv
 
-REM Activar y instalar dependencias
+# Activar y instalar dependencias
 echo 📥 Instalando dependencias...
 call venv\Scripts\activate.bat
 python -m pip install --upgrade pip

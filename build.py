@@ -46,6 +46,9 @@ def main():
         "--hidden-import=PySide6.QtWidgets",   # Widgets de PySide6
         "--hidden-import=PySide6.QtGui",       # GUI de PySide6
         "--clean",                      # Limpiar cache antes de compilar
+        
+
+        
         str(main_script)
     ]
     
