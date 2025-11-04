@@ -34,21 +34,24 @@ La aplicación consulta y muestra:
    ```cmd
    setup.bat
    ```
-   O manualmente:
+   
+   **Si hay problemas con las dependencias**:
    ```cmd
-   python -m venv venv
-   venv\Scripts\activate
-   pip install -r requirements.txt
+   setup-emergency.bat    # Usa versiones específicas
+   diagnostico.bat        # Para identificar problemas
    ```
-3. **Ejecutar la aplicación**:
-   ```cmd
-   run.bat
-   ```
+   
    O con PowerShell:
    ```powershell
    .\setup.ps1    # Solo la primera vez
    .\run.ps1      # Para ejecutar
    ```
+3. **Ejecutar la aplicación**:
+   ```cmd
+   run.bat
+   ```
+
+**📋 Para problemas en Windows**: Ver [WINDOWS.md](WINDOWS.md) con soluciones detalladas
 
 #### En Linux/macOS:
 1. **Clonar o descargar** el proyecto
