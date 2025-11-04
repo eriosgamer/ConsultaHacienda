@@ -45,11 +45,9 @@ La aplicación consulta y muestra:
 
 #### En Linux/macOS:
 1. **Clonar o descargar** el proyecto
-2. **Crear y activar entorno virtual**:
+2. **Ejecutar setup**:
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
+   ./setup.sh
    ```
 3. **Ejecutar la aplicación**:
    ```bash
@@ -111,6 +109,7 @@ ConsultaHacienda/
 ├── .github/workflows/  # GitHub Actions para CI/CD
 │
 ├── Scripts Linux/macOS:
+├── setup.sh            # Configuración inicial
 ├── run.sh              # Ejecutar aplicación
 ├── compile.sh          # Compilar aplicación
 │
