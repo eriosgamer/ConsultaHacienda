@@ -3,13 +3,17 @@
 
 echo "🔧 Configurando ConsultaHacienda..."
 
-# Verificar Python
-if ! command -v python3 &> /dev/null; then
-    echo "❌ Python3 no encontrado. Instala Python 3.8-3.12"
+
+# Priorizar python3.12 en el PATH
+if command -v python3.12 &> /dev/null; then
+    export PATH="$(dirname $(command -v python3.12)):$PATH"
+    PYTHON_CMD=python3.12
+else
+    echo "❌ Python 3.12 no encontrado. Instala Python 3.8-3.12."
     exit 1
 fi
 
-PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
+PYTHON_VERSION=$($PYTHON_CMD --version 2>&1 | awk '{print $2}')
 echo "✅ Python: $PYTHON_VERSION"
 
 # Crear entorno virtual
@@ -17,7 +21,7 @@ echo "📦 Creando entorno virtual..."
 if [ -d "venv" ]; then
     rm -rf venv
 fi
-python3 -m venv venv
+$PYTHON_CMD -m venv venv
 
 # Activar y instalar dependencias
 echo "📥 Instalando dependencias..."
