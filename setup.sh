@@ -3,13 +3,11 @@
 
 echo "🔧 Configurando ConsultaHacienda..."
 
-
-# Priorizar python3.12 en el PATH
-if command -v python3.12 &> /dev/null; then
-    export PATH="$(dirname $(command -v python3.12)):$PATH"
-    PYTHON_CMD=python3.12
+# Detectar python3 disponible
+if command -v python3 &> /dev/null; then
+    PYTHON_CMD=python3
 else
-    echo "❌ Python 3.12 no encontrado. Instala Python 3.8-3.12."
+    echo "❌ Python 3 no encontrado. Instala Python 3.8+."
     exit 1
 fi
 
@@ -35,6 +33,6 @@ if python -c "import PySide6, requests; print('✅ Todo instalado correctamente'
     echo "✅ ¡Listo! Usa ./run.sh para ejecutar la aplicación"
 else
     echo "❌ Error en la instalación"
-    echo "💡 Asegúrate de usar Python 3.8-3.12 (NO 3.13+)"
+    echo "💡 Asegúrate de usar Python 3.8+"
     exit 1
 fi

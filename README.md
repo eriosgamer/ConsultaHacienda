@@ -2,6 +2,8 @@
 
 Una aplicación de escritorio desarrollada con PySide6 para consultar información tributaria de Costa Rica a través de la API de Hacienda.
 
+<img width="989" height="583" alt="Image" src="https://github.com/user-attachments/assets/13937421-9cc2-460d-ac9d-4c8b3e0c4a55" />
+
 ## Características
 
 - **Interfaz gráfica moderna**: Desarrollada con PySide6/Qt6
@@ -152,6 +154,6 @@ python build.py clean
 
 ## Notas importantes
 
-- **Requiere Python 3.8-3.12** (Python 3.13+ aún no es compatible con PySide6)
+- **Requiere Python 3.8+** (PySide6 6.10+ es compatible con Python 3.13-3.14)
 - **Conexión a internet** necesaria para consultar la API
 - **API oficial** del Ministerio de Hacienda de Costa Rica

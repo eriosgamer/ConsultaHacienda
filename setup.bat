@@ -29,7 +29,7 @@ echo 🧪 Verificando instalación...
 python -c "import PySide6, requests; print('✅ Todo instalado correctamente')"
 if errorlevel 1 (
     echo ❌ Error en la instalación
-    echo 💡 Asegúrate de usar Python 3.8-3.12 (NO 3.13+)
+    echo 💡 Asegúrate de usar Python 3.8+
     pause
     exit /b 1
 )
