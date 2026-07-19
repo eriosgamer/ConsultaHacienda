@@ -30,16 +30,28 @@ _UNNECESSARY_QT_DIRS = [
 ]
 
 
-def _strip_unused_plugins(venv_dir: Path) -> list[Path]:
+def _find_pyside6_plugins() -> Path | None:
+    """Find PySide6 plugins directory, works with or without venv."""
+    import subprocess
+    try:
+        result = subprocess.run(
+            [sys.executable, "-c", "import PySide6; print(PySide6.__file__)"],
+            capture_output=True, text=True, check=True
+        )
+        pyside6_init = Path(result.stdout.strip())
+        qt_plugins = pyside6_init.parent / "Qt" / "plugins"
+        if qt_plugins.exists():
+            return qt_plugins
+    except Exception:
+        pass
+    return None
+
+
+def _strip_unused_plugins() -> list[Path]:
     """Remove unnecessary Qt plugins before building. Returns list of removed files."""
-    qt_plugins = venv_dir / "lib" / "site-packages" / "PySide6" / "Qt" / "plugins"
-    if not qt_plugins.exists():
-        # Try alternative path for different Python versions
-        for p in venv_dir.glob("lib/python*/site-packages/PySide6/Qt/plugins"):
-            qt_plugins = p
-            break
-        else:
-            return []
+    qt_plugins = _find_pyside6_plugins()
+    if qt_plugins is None:
+        return []
 
     removed = []
     for plugin_rel in _UNNECESSARY_QT_PLUGINS:
@@ -72,12 +84,10 @@ def main():
     print(f"💻 Sistema operativo detectado: {platform.system()}")
     print("-" * 50)
     
-    # Strip unnecessary Qt plugins to reduce binary size (only if venv exists)
-    venv_dir = current_dir / "venv"
-    if venv_dir.exists():
-        removed = _strip_unused_plugins(venv_dir)
-        if removed:
-            print(f"🧹 Plugins innecesarios eliminados: {len(removed)}")
+    # Strip unnecessary Qt plugins to reduce binary size
+    removed = _strip_unused_plugins()
+    if removed:
+        print(f"🧹 Plugins innecesarios eliminados: {len(removed)}")
     
     # Configuración específica por SO
     is_windows = platform.system() == "Windows"
