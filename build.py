@@ -9,6 +9,53 @@ import shutil
 import platform
 from pathlib import Path
 
+# Qt plugins to remove before building to reduce binary size
+# These are not used by the app and some pull in heavy system libraries
+# (e.g., GTK3 theme pulls in libgtk-3 + libicudata.so ~40MB)
+_UNNECESSARY_QT_PLUGINS = [
+    "platformthemes/libqgtk3.so",
+    "platforms/libqeglfs.so",
+    "platforms/libqminimalegl.so",
+    "platforms/libqlinuxfb.so",
+    "platforms/libqoffscreen.so",
+    "platforms/libqvnc.so",
+    "platforms/libqminimal.so",
+    "platforminputcontexts/libqtvirtualkeyboardplugin.so",
+    "networkinformation/libqconnman.so",
+    "networkinformation/libqglib.so",
+    "networkinformation/libqnetworkmanager.so",
+]
+_UNNECESSARY_QT_DIRS = [
+    "egldeviceintegrations",
+]
+
+
+def _strip_unused_plugins(venv_dir: Path) -> list[Path]:
+    """Remove unnecessary Qt plugins before building. Returns list of removed files."""
+    qt_plugins = venv_dir / "lib" / "site-packages" / "PySide6" / "Qt" / "plugins"
+    if not qt_plugins.exists():
+        # Try alternative path for different Python versions
+        for p in venv_dir.glob("lib/python*/site-packages/PySide6/Qt/plugins"):
+            qt_plugins = p
+            break
+        else:
+            return []
+
+    removed = []
+    for plugin_rel in _UNNECESSARY_QT_PLUGINS:
+        plugin_path = qt_plugins / plugin_rel
+        if plugin_path.exists():
+            plugin_path.unlink()
+            removed.append(plugin_path)
+
+    for dir_name in _UNNECESSARY_QT_DIRS:
+        dir_path = qt_plugins / dir_name
+        if dir_path.exists():
+            shutil.rmtree(dir_path)
+            removed.append(dir_path)
+
+    return removed
+
 
 def main():
     """Función principal para compilar la aplicación"""
@@ -30,10 +77,36 @@ def main():
     print(f"💻 Sistema operativo detectado: {platform.system()}")
     print("-" * 50)
     
+    # Strip unnecessary Qt plugins to reduce binary size
+    removed = _strip_unused_plugins(venv_dir)
+    if removed:
+        print(f"🧹 Plugins innecesarios eliminados: {len(removed)}")
+    
     # Configuración específica por SO
     is_windows = platform.system() == "Windows"
     separator = ";" if is_windows else ":"
     
+    # Excluir módulos Qt que la app no usa (reducen ~40-50MB)
+    exclude_modules = [
+        "PySide6.QtQml",
+        "PySide6.QtQuick",
+        "PySide6.QtPdf",
+        "PySide6.QtWebEngine",
+        "PySide6.QtWebEngineCore",
+        "PySide6.QtWebEngineWidgets",
+        "PySide6.QtVirtualKeyboard",
+        "PySide6.QtMultimedia",
+        "PySide6.Qt3D",
+        "PySide6.QtQuick3D",
+        "PySide6.QtDesigner",
+        "PySide6.QtOpenGL",
+        "PySide6.QtSvg",
+        "PySide6.QtHelp",
+    ]
+    exclude_flags = []
+    for mod in exclude_modules:
+        exclude_flags.extend(["--exclude-module", mod])
+
     # Comando de PyInstaller
     cmd = [
         "pyinstaller",
@@ -46,9 +119,7 @@ def main():
         "--hidden-import=PySide6.QtWidgets",   # Widgets de PySide6
         "--hidden-import=PySide6.QtGui",       # GUI de PySide6
         "--clean",                      # Limpiar cache antes de compilar
-        
-
-        
+    ] + exclude_flags + [
         str(main_script)
     ]
     
@@ -59,10 +130,7 @@ def main():
     
     # En Windows, agregar opciones adicionales para evitar problemas
     if is_windows:
-        cmd.extend([
-            "--collect-all=PySide6",
-            "--noconfirm"
-        ])
+        cmd.append("--noconfirm")
     
     try:
         # Ejecutar PyInstaller

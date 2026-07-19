@@ -1,8 +1,8 @@
 # ConsultaHacienda - Dependencias
 # Compatible con Python 3.8+ (PySide6 6.10+ soporta Python 3.13-3.14)
 
-# GUI Framework - pip instala la mejor versión compatible automáticamente
-PySide6>=6.5.0
+# GUI Framework - Essentials incluye Core/Gui/Widgets, sin Addons (reduce ~40MB en binario)
+PySide6-Essentials>=6.5.0
 
 # HTTP requests - versión estable
 requests>=2.31.0,<3.0.0
