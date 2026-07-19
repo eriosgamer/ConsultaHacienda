@@ -63,24 +63,21 @@ def main():
     # Directorio actual
     current_dir = Path(__file__).parent
     main_script = current_dir / "main.py"
-    venv_dir = current_dir / "venv"
     
     if not main_script.exists():
         print("❌ Error: No se encontró el archivo main.py")
-        return False
-    
-    if not venv_dir.exists():
-        print("❌ Error: No se encontró el entorno virtual. Ejecuta: python3 -m venv venv")
         return False
     
     print("🔧 Compilando aplicación ConsultaHacienda...")
     print(f"💻 Sistema operativo detectado: {platform.system()}")
     print("-" * 50)
     
-    # Strip unnecessary Qt plugins to reduce binary size
-    removed = _strip_unused_plugins(venv_dir)
-    if removed:
-        print(f"🧹 Plugins innecesarios eliminados: {len(removed)}")
+    # Strip unnecessary Qt plugins to reduce binary size (only if venv exists)
+    venv_dir = current_dir / "venv"
+    if venv_dir.exists():
+        removed = _strip_unused_plugins(venv_dir)
+        if removed:
+            print(f"🧹 Plugins innecesarios eliminados: {len(removed)}")
     
     # Configuración específica por SO
     is_windows = platform.system() == "Windows"
